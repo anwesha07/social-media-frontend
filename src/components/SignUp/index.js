@@ -1,4 +1,7 @@
-import React, { Component } from 'react';
+import React, {useState, useRef, useContext} from 'react';
+import { Navigate } from 'react-router-dom';
+import { UserContext } from '../../App';
+
 import axios from 'axios';
 
 import Modal from '../Modals'
@@ -9,29 +12,27 @@ import Page4 from './Page4'
 
 import arrowBackIcon from '../../icons/arrowBack.svg'
 
+function SignUp(props) {
+    const input = useRef({
+        username: '',
+        email: '',
+        dateInput: '',
+        monthInput: '',
+        yearInput: '',
+        profilePicture: '',
+        coverPicture: '',
+        description: '',
+        password: '',
+        dateOfBirth: ''
+    });
+    
+    const {setIsLoggedIn, setUser} = useContext(UserContext);
 
-export class SignUp extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            pageNumber: 1,
-            totalPages: 4,
-        }
-        this.inputs = {
-            name: '',
-            email: '',
-            dateInput: '',
-            monthInput: '',
-            yearInput: '',
-            profilePicture: '',
-            coverPicture: '',
-            description: '',
-            password: ''
-        }
-    }
 
-    displayModalHeader = () => {
-        const {pageNumber, totalPages} = this.state;
+    const [pageNumber, setPageNumber] = useState(1);
+    const [totalPages, setTotalPages] = useState(4);
+
+    const displayModalHeader = () => {
         return (
             <div>
                 Page {pageNumber} of {totalPages}
@@ -39,46 +40,22 @@ export class SignUp extends Component {
         )
     }
 
-    displayPage = () => {
-        const {pageNumber} = this.state;
-        switch(pageNumber) {
-            case 1:
-                return <Page1 inputs={this.inputs} goToNextPage={this.nextPage}/>
-            case 2:
-                return <Page2 inputs={this.inputs} goToNextPage={this.nextPage}/>
-            case 3:
-                return <Page3 inputs={this.inputs} goToNextPage={this.nextPage}/>
-            case 4:
-                return <Page4 inputs={this.inputs} goToNextPage={this.nextPage}/>
-            default:
-                return <Page1/>
-        }
-    }
-    nextPage = (inputs) => {
-        this.inputs = { ...this.inputs, ...inputs };
-        const {pageNumber, totalPages} = this.state;
+    const nextPage = (inputs) => {
+        input.current = {...input.current , ...inputs};
         if (pageNumber !== totalPages) {
-            this.setState ({
-                pageNumber: pageNumber + 1
-            })
+            setPageNumber (prevPageNumber => prevPageNumber + 1);
         } else {
-            // const { name, email, password } = this.inputs
-            // const data = { name, email, password };
-            // axios
-            //     .post('http://localhost:5000/user/signup', data)
-            //     .then(response => {
-            //         console.log(response.data);
-            //     })
-            //     .catch(err => {
-            //         console.log(err?.response?.data);
-            //     });
+            // this is the last page so submitting the form
+            const dateOfBirth = `${input.current.dateInput}/${input.current.monthInput}/${input.current.yearInput}`;
+            const {monthInput, dateInput, yearInput, ...data} = {...input.current, dateOfBirth};
 
-
+            // creating multipart/form-data to send files
             const formData = new FormData();
-            Object.keys(this.inputs).forEach(inputField => {
-                if (this.inputs[inputField])
-                    formData.append(inputField, this.inputs[inputField]);
+            Object.keys(data).forEach(fieldName => {
+                if (data[fieldName])
+                    formData.append(fieldName, data[fieldName]);
             });
+
             const config = {
                 /* Content type is a header which indicates what type of data is present in the request body,
                 For JSON data the value is 'application/json' which need not be set explicitely.
@@ -87,50 +64,74 @@ export class SignUp extends Component {
                     'Content-Type': 'multipart/form-data'
                 }
             };
-            console.log(config);
+
             axios
-                .post('http://localhost:5000/user/signup', formData, config)
+                .post('http://localhost:3000/api/auth/register', formData, config)
                 .then(response => {
                     console.log(response.data);
+                    //closing modal
+                    props.closeModal();
+                    alert("user account created!")
+                    const user = response.data;
+                    localStorage.setItem('TOKEN', user.token);
+                    setIsLoggedIn(true);
+                    setUser(user);
+                    Navigate('/timeline')
                 })
                 .catch(err => {
+                    // optional chaining : err.reponse && err.response.data
                     console.log(err.response?.data);
+                    alert(err.response.data.message);
                 });
+
+           
+
         }
     }
 
-    goToPreviousPage = () => {
-        const {pageNumber, totalPages} = this.state;
-        if (pageNumber != 1) {
-            this.setState ({
-                pageNumber: pageNumber - 1
-            })
+    const goToPreviousPage = () => {
+        if (pageNumber !== 1) {
+            setPageNumber((prevPageNumber) => prevPageNumber - 1);
         }
     }
-    displayModalButton = () => {
-        const {pageNumber, totalPages} = this.state;
 
+
+    const displayPage = () => {
+        switch(pageNumber) {
+            case 1:
+                return <Page1 inputs={input.current} goToNextPage={nextPage}/>
+            case 2:
+                return <Page2 inputs={input.current} goToNextPage={nextPage}/>
+            case 3:
+                return <Page3 inputs={input.current} goToNextPage={nextPage}/>
+            case 4:
+                return <Page4 inputs={input.current} goToNextPage={nextPage}/>
+            default:
+                return <Page1/>
+        }
+    }
+
+
+
+    const displayModalButton = () => {
         return(
             <div>
                 {pageNumber === 1 
-                ? <button className='closeModal' onClick={this.props.closeModal}>&times;</button> 
-                : <button className='backModal' onClick={this.goToPreviousPage}><img src={arrowBackIcon} className="arrowBackIcon" alt="go back" /></button>}
+                ? <button className='closeModal' onClick={props.closeModal}>&times;</button> 
+                : <button className='backModal' onClick={goToPreviousPage}><img src={arrowBackIcon} className="arrowBackIcon" alt="go back" /></button>}
             </div>       
         );
     }
 
-
-    render() {
-        return (
-            <>
-                <Modal displayHeading={this.displayModalHeader()} displayButton={this.displayModalButton()}>
-                    <div>
-                        {this.displayPage()}
-                    </div>  
-                </Modal>
-            </>
-        );
-    }
+    return (
+        <>
+        <Modal displayHeading={displayModalHeader()} displayButton={displayModalButton()}>
+            <div>
+                {displayPage()}
+            </div>  
+        </Modal>       
+        </>
+    );
 }
 
 export default SignUp

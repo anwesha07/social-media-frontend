@@ -1,23 +1,34 @@
-import React, { Component } from 'react'
+import React from 'react';
 import './style.css'
 
-export class SignUp extends Component {
-  render() {
+
+function Modal(props) {
     return (
-      <div className='modalPage'>
-        <div className='overlay'></div>
-        <div className='modal'>
-            <header>
-                {this.props.displayButton}
-                {this.props.displayHeading}
-            </header>
-            <div>
-                {this.props.children}
+        <div className='modalPage'>
+            <div className='overlay'></div>
+            <div className='modal'>
+                {props.displayButton}
+                {props.displayHeading}
+                {/* {
+                    (props.displayHeading) ? (
+                        <header>
+                            
+                        </header>
+                    ) : null
+                    (props.displayHeading && props.displayButton) ? (
+                        <header>
+                            {props.displayButton}
+                            {props.displayHeading}
+                        </header>
+                    ) : null
+                } */}
+                <div>
+                    {props.children}
+                </div>
             </div>
         </div>
-      </div>
+
     )
-  }
 }
 
-export default SignUp
+export default Modal

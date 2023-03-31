@@ -1,73 +1,72 @@
-import React, { Component } from 'react'
-import Modal from '../Modals'
+import React , {useContext, useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import Modal from '../Modals';
 import axios from 'axios';
 
-export class Login extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            password: '',
-            email: ''
-        }
+import { UserContext } from '../../App';
+
+function Login(props) {
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+
+    const navigate = useNavigate();
+
+    const {setIsLoggedIn, setUser} = useContext(UserContext);
+
+
+
+    const handleEmailValue = (event) => {
+        setEmail(event.target.value);
     }
 
-    handleEmailValue = (event) => {
-        this.setState({
-            email: event.target.value
-        })
+    const handlePasswordValue = (event) => {
+        setPassword(event.target.value);
     }
 
-    handlePasswordValue = (event) => {
-        this.setState({
-            password: event.target.value
-        })
+    const displayModalButton = () => {
+        return(
+            <div>
+                <button className='closeModal' onClick={props.closeModal}>&times;</button>
+            </div>       
+        );
     }
 
-    submitPage = (event) => {
+    const submitPage = (event) => {
         event.preventDefault();
-        const data = {...this.state};
+        const data = {email, password};
         console.log(data);
         axios
             .post('http://localhost:3000/api/auth/login', data)
             .then(response => {
-                const { email, token, userId, username } = response.data;
-                localStorage.setItem('TOKEN', token);
-                this.setState({
-                    
-                })
+                console.log(response.data);
+                const user = response.data;
+                localStorage.setItem('TOKEN', user.token);
+                setIsLoggedIn(true);
+                setUser(user);
+                navigate('/timeline')
             })
             .catch(err => {
                 console.log(err?.response?.data);
             });
     }
 
-    displayModalButton = () => {
-        return(
-            <div>
-                <button className='closeModal' onClick={this.props.closeModal}>&times;</button>
-            </div>       
-        );
-    }
-
-
-    render() {
     return (
-        <div>
-            <Modal displayButton={this.displayModalButton()}>
-                <h1>Enter your credentials:</h1>
-                <form onSubmit={this.submitPage}>
-                    <label>Email:</label>
-                    <input type='email' value={this.state.email} onChange={this.handleEmailValue} />
-                    <label>Password:</label>
-                    <input type='password' value={this.state.password} onChange={this.handlePasswordValue} />
+    <div>
+        <Modal displayButton={displayModalButton()}>
+            <h1>Enter your credentials:</h1>
+            <form onSubmit={submitPage}>
+                <label>Email:</label>
+                <input type='email' value={email} onChange={handleEmailValue} />
+                <label>Password:</label>
+                <input type='password' value={password} onChange={handlePasswordValue} />
 
-                    <input type='submit' value='Login' disabled={!this.state.email || !this.state.password}/>
+                <input type='submit' value='Login' disabled={!email || !password}/>
 
-                </form>
-            </Modal>
-        </div>
+            </form>
+        </Modal>
+    </div>
     )
-    }
 }
 
 export default Login

@@ -1,0 +1,140 @@
+.inputPost {
+    margin: 10px;
+    border-radius: 20px;
+    background-color: #eef0f2;
+    width: 450px;
+    padding: 5px;
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    height: 50px;
+}
+.createPostUpperHeader{
+    display: flex;
+}
+.createPostprofilePicture{
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 3px;
+    padding-top: 5px;
+}
+.createPostprofilePicture img {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+}
+
+.createPostImageInput {
+    border: 2px solid #bfbfbf;
+    border-radius: 10px;
+    padding: 8px;
+    margin: 5px;
+    width: 450px;
+    height: 160px;
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+    overflow-y: auto;
+}
+/* .createPostImageInput form {
+    height: 100%;
+    width: 100%;
+} */
+.imageInputBox{
+    background-color: #eef0f2;
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+.createPostImageInputUploaded {
+    position: relative;
+}
+.imageUploadedInputBox {
+    position: absolute;
+    height: 30px;
+    width: 100px;
+    font-size: small;
+    z-index: 1000;
+    top: 20px;
+    left: 20px;
+    opacity: 0.7;
+}
+.imageInputBox:hover {
+    background-color: #d4d6d7;
+
+}
+.createPostImageInput input {
+    display: none;
+}
+
+.createPostImagePreview {
+    height: 400px;
+    width: 100%;
+    position: relative;
+}
+.createPostImagePreview img {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    border-radius: 5px;
+}
+.removePictureButton {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    background-color: white;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    border: 1px solid #bfbfbf;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    color: gray;
+    font-size: larger;
+    /* opacity: 0.7; */
+}
+.removePictureButton:hover {
+    background-color: #eef0f2;
+    
+}
+/* .createNewPost {
+    border: 2px solid #f00808;
+    border-radius: 10px;
+    padding: 8px;
+    margin: 5px;
+    width: 450px;
+    height: 100px;
+    overflow-y: auto;
+    background-color: blue;
+} */
+.createPostTextInput{
+    border: 2px solid #bfbfbf;
+    border-radius: 10px;
+    padding: 8px;
+    margin: 5px;
+    width: 450px;
+    height: 100px;
+    overflow-y: auto;
+
+}
+.newPostTextArea {
+    border: none;
+    height: 100%;
+    width: 100%;
+    outline: none;
+    resize: none;
+}
+.createPostBody {
+    height: 300px;
+    overflow-y: auto;
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; */
+}

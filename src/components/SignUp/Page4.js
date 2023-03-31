@@ -1,88 +1,58 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 
-export class page4 extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            password: '',
-            confirmPassword: '',
-            error: false
-        }
+function Page4(props) {
+
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [error, setError] = useState(false);
+
+
+  useEffect(()=> {
+    if (confirmPassword && password && password !== confirmPassword) {
+      setError(true);
+    } else {
+      setError(false);
     }
+  }, [password, confirmPassword]);
 
-    setPassword = (event) => {
-        this.setState({
-            password: event.target.value,
-        })
-    }
-    setConfirmPassword = (event) => {
-        this.setState({
-            confirmPassword: event.target.value,
-        }, ()=> {
-            const {password, confirmPassword} = this.state;
-            if (password !== confirmPassword) {
-                this.setState({
-                    error: true,
-                })
-            } else {
-                this.setState({
-                    error: false,
-                })
-            }
-        })
-    }
+  const setPasswordInput = (event) => {
+    setPassword(event.target.value);
+  }
+  const setConfirmPasswordInput = (event) => {
+    setConfirmPassword(event.target.value);
+  }
 
-    submitPage = (event) => {
-        event.preventDefault();
-        const {password} = this.state;
-        // if (password !== confirmPassword) {
-        //     this.setState({
-        //         error: true,
-        //         password: '',
-        //         confirmPassword: ''
-        //     })
-        // } else {
-        //     this.setState({
-        //         error: false,
-        //     })
-        // }
-        this.props.goToNextPage({password});
-    }
+  const submitPage = (event) => {
+    event.preventDefault();
+    props.goToNextPage({password});
+  }
 
+  const {username, dateInput, monthInput, yearInput, email} = props.inputs;
+  return (
+    <div>
+      <h1>Your Details:</h1>
+      <form onSubmit={submitPage}>
 
+          <label>Name:</label>
+          <input type='text' value={username} readOnly/>
+          <label>Date of Birth:</label>
+          <input type='text' value={`${dateInput}/${monthInput}/ ${yearInput}` } readOnly/>
+          <label>Email:</label>
+          <input type='email' value={email} readOnly/>
+          
 
-    render() {
-    const {name, dateInput, monthInput, yearInput, email} = this.props.inputs;
-    return (
-        <div>
-        <h1>Your Details:</h1>
-        <form onSubmit={this.submitPage}>
+          <h2>Set your password</h2>
+          <label>Password:</label>
+          <input type='password' value={password} onChange={setPasswordInput}/> 
+          <label>Confirm Password</label>
+          <input type='password' value={confirmPassword} onChange={setConfirmPasswordInput}/>
 
-            <label>Name:</label>
-            <input type='text' value={name} readOnly/>
-            <label>Date of Birth:</label>
-            <input type='text' value={`${dateInput} ${monthInput}, ${yearInput}` } readOnly/>
-            <label>Email:</label>
-            <input type='email' value={email} readOnly/>
-            
+          {error ? <div>Password doesnot match with confirm password</div> : null}
 
-            <h2>Set your password</h2>
-            <label>Password:</label>
-            <input type='password' value={this.state.password} onChange={this.setPassword}/> 
-            <label>Confirm Password</label>
-            <input type='password' value={this.state.confirmPassword} onChange={this.setConfirmPassword}/>
-
-            {this.state.error ? <div>Password doesnot match with confirm password</div> : null}
-
-            <input type='submit' disabled={!this.state.password ||!this.state.confirmPassword} />
-        </form>
-
-
-
-        
-        </div>
-    )
-    }
+          <input type='submit' disabled={!password ||!confirmPassword} />
+      </form> 
+    </div>
+  )
 }
 
-export default page4
+export default Page4
