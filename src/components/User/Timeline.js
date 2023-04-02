@@ -34,7 +34,7 @@ function Timeline() {
       params : {
         page: pageNumber
       }
-  }
+    }
     axios
       .get('http://localhost:3000/api/user/timeline', config)
       .then(
@@ -73,7 +73,39 @@ function Timeline() {
     }
  }
 
+const likePost = (likedPost) => {
+  console.log("like button pressed!");
+  console.log(likedPost);
+  const TOKEN = localStorage.getItem('TOKEN')
 
+  const config = {
+    headers: { 
+        'x-token': TOKEN
+    }
+  }
+  axios.put(`http://localhost:3000/api/post/${likedPost._id}/like`, {}, config)
+    .then((response) => {
+      const modifiedPosts = posts.map((post) => {
+        if (post._id === likedPost._id) {
+          if (response.data.postLiked) {
+            post.numOfLikes += 1;
+            console.log("post liked!");
+
+          } else {
+            post.numOfLikes -= 1
+            console.log("post unliked!");
+
+          }
+        }
+        return post
+      });
+      setPosts(modifiedPosts);
+    })
+    .catch(
+      err => {console.log(err?.response?.data)}
+    )
+  
+}
 
 
   const displayPost = (post) => {
@@ -117,7 +149,7 @@ function Timeline() {
             {`${numOfLikes} likes, ${numOfComments} comments`} 
           </div> 
           <div className='lowerFooter'>
-            <div className='like'>Like</div>
+            <div className='like' onClick={() => likePost(post)}>Like</div>
             <div className='comment'>Comment</div>
           </div>     
       </div>

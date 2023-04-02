@@ -7,28 +7,10 @@ import { UserContext } from '../../App';
 
 
 function BaseLayout(props) {
-    // alert("BaseLayout page")
 
     const {user} = useContext(UserContext);
-
-    // console.log(user);
     const [searchValue, setSearchValue] = useState('');
 
-    // const [reachedEndOfContent, setReachedEndOfContent] = useState(false);
-    // const [pageNumber, setPageNumber] = useState(1);
-
-    // const handleScroll = (e) => {
-    //     // console.log("scrolling");
-    //     // console.log({scrollHeight: e.target.scrollHeight});
-    //     // console.log({scrollTop: e.target.scrollTop})
-    //     const bottom = (e.target.scrollHeight - e.target.scrollTop) - e.target.clientHeight;
-    //     // console.log({clientHeight: e.target.clientHeight})
-    //     if (bottom <= 1) { 
-    //         alert("bottom");
-    //         setReachedEndOfContent(true);
-    //         setPageNumber((prevPageNumber) => prevPageNumber + 1);
-    //     }
-    //  }
 
     return (
         <div className='layout'>
