@@ -52,4 +52,29 @@
     font-size: small;
 }
 
+.deletePost {
+    margin-left: auto;
+    font-size: 1.5rem;
+    padding: 10px;
+    padding-top: 1px;
+    height: 50%;
+    cursor: pointer;
+}
 
+.postImages {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.postImages img {
+    height: 200px;
+    width: 200px;
+    border: 2px solid #f0f2f5;
+    border-radius: 5px;
+    margin: 2px;
+}
+.postDescription {
+    font-size: 1rem;
+    padding: 5px;
+    margin-bottom: 2px;
+}
