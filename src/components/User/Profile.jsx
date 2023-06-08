@@ -5,8 +5,6 @@ import DisplayPosts from "../Posts/DisplayPosts";
 import "./profileStyles.css";
 
 import defaultCoverImage from "../../defaultCoverImage.jpg";
-import EditProfile from "./EditProfile";
-import gravatar from "gravatar";
 
 function Profile() {
   const TOKEN = localStorage.getItem("TOKEN");
