@@ -2,8 +2,12 @@ import React from "react";
 import "./postStyle.css";
 import CardLayout from "../Layouts/CardLayout";
 import axios from "axios";
+import defaultProfilePicture from "../../defaultProfilePicture.svg";
+import Comments from "./Comments";
 
-function DisplayPosts({ posts, setModifiedPosts, postPage }) {
+function DisplayPosts(props) {
+  const { posts, setModifiedPosts, postPage, user } = props;
+  console.log(user);
   const TOKEN = localStorage.getItem("TOKEN");
 
   const likePost = (likedPost) => {
@@ -16,7 +20,11 @@ function DisplayPosts({ posts, setModifiedPosts, postPage }) {
       },
     };
     axios
-      .put(`http://localhost:3000/api/post/${likedPost._id}/like`, {}, config)
+      .put(
+        `${process.env.REACT_APP_SERVER_URL}/api/post/${likedPost._id}/like`,
+        {},
+        config
+      )
       .then((response) => {
         const modifiedPosts = posts.map((post) => {
           if (post._id === likedPost._id) {
@@ -44,16 +52,30 @@ function DisplayPosts({ posts, setModifiedPosts, postPage }) {
       },
     };
     axios
-      .delete(`http://localhost:3000/api/post/${deletedPost._id}`, config)
-      .then((response) => {
+      .delete(
+        `${process.env.REACT_APP_SERVER_URL}/api/post/${deletedPost._id}`,
+        config
+      )
+      .then((_response) => {
         const modifiedPosts = posts.filter((post) => {
-          if (post._id != deletedPost._id) return post;
+          return post._id !== deletedPost._id;
         });
         setModifiedPosts(modifiedPosts);
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const getProfilePicture = (post) => {
+    if (post.author._id === user._id)
+      return user.profilePicture
+        ? `${process.env.REACT_APP_SERVER_URL}/${user.profilePicture}`
+        : defaultProfilePicture;
+
+    return post.author.profilePicture
+      ? `${process.env.REACT_APP_SERVER_URL}/${post.author.profilePicture}`
+      : defaultProfilePicture;
   };
 
   const displayPost = (post) => {
@@ -64,13 +86,13 @@ function DisplayPosts({ posts, setModifiedPosts, postPage }) {
       <>
         <div className="postHeader">
           <div className="postProfilePicture">
-            <img
-              crossOrigin="anonymous"
-              src={`${process.env.REACT_APP_SERVER_URL}/${post.author.profilePicture}`}
-              alt=""
-            />
+            <img crossOrigin="anonymous" src={getProfilePicture(post)} alt="" />
           </div>
-          <div className="postUserName">{post.author.username}</div>
+          <div className="postUserName">
+            {post.author._id === user._id
+              ? user.username
+              : post.author.username}
+          </div>
           {postPage === "profile" ? (
             <div className="deletePost" onClick={() => deletePost(post)}>
               &times;
@@ -108,6 +130,9 @@ function DisplayPosts({ posts, setModifiedPosts, postPage }) {
             </div>
             <div className="comment">Comment</div>
           </div>
+        </div>
+        <div>
+          <Comments post={post} />
         </div>
       </>
     );

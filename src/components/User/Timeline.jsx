@@ -1,11 +1,14 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
 
 import CreateNewPost from "./CreateNewPost";
 import "./timelineStyles.css";
 import DisplayPosts from "../Posts/DisplayPosts";
+import { UserContext } from "../../App";
 
 function Timeline() {
+  const { user } = useContext(UserContext);
+
   const [posts, setPosts] = useState([]);
   const TOKEN = localStorage.getItem("TOKEN");
 
@@ -64,6 +67,7 @@ function Timeline() {
       <DisplayPosts
         posts={posts}
         setModifiedPosts={(modifiedPosts) => setPosts(modifiedPosts)}
+        user={user}
       />
     </div>
   );

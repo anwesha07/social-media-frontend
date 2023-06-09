@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link, Outlet } from "react-router-dom";
 import "./layoutStyle.css";
+import defaultProfilePicture from "../../defaultProfilePicture.svg";
 
 import { UserContext } from "../../App";
 
@@ -29,7 +30,11 @@ function BaseLayout() {
           <div className="navBarProfilePicture">
             <img
               crossOrigin="anonymous"
-              src={`${process.env.REACT_APP_SERVER_URL}/${user.profilePicture}`}
+              src={
+                user.profilePicture
+                  ? `${process.env.REACT_APP_SERVER_URL}/${user.profilePicture}`
+                  : defaultProfilePicture
+              }
               alt=""
             />
           </div>
