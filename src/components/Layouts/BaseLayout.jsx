@@ -1,66 +1,22 @@
-import React, { useState, useContext } from "react";
-import { Link, Outlet } from "react-router-dom";
-import "./layoutStyle.css";
-import defaultProfilePicture from "../../defaultProfilePicture.svg";
+import React from "react";
+import { Outlet } from "react-router-dom";
 
-import { UserContext } from "../../App";
+import Navbar from './Navbar';
+import Sidebar from './Sidebar';
+
 
 function BaseLayout() {
-  const { user } = useContext(UserContext);
-  const [searchValue, setSearchValue] = useState("");
-
   return (
-    <div className="layout">
-      <div className="navBar">
-        <div className="icon">
-          {" "}
-          <h2>icon</h2>{" "}
-        </div>
-        <div className="searchBox">
-          <input
-            type="text"
-            placeholder={"Search"}
-            value={searchValue}
-            onChange={(event) => {
-              setSearchValue(event.target.value);
-            }}
-          />
-        </div>
-        <div className="user">
-          <div className="navBarProfilePicture">
-            <img
-              crossOrigin="anonymous"
-              src={
-                user.profilePicture
-                  ? `${process.env.REACT_APP_SERVER_URL}/${user.profilePicture}`
-                  : defaultProfilePicture
-              }
-              alt=""
-            />
-          </div>
-          <div className="navBarUserName">
-            <h2>{user.username}</h2>
-          </div>
+    <>
+      <Navbar />
+      <div className="flex w-full h-full mt-[72px]">
+        <Sidebar />
+        {/* render the page here */}
+        <div className="grow bg-slate-700 px-1">
+          <Outlet />
         </div>
       </div>
-      <div className="sideBar">
-        <ul>
-          <li>
-            <Link to="/timeline">Home</Link>
-          </li>
-          <li>
-            <Link to="/profile">{user.username}</Link>
-          </li>
-          <li>
-            <Link to="/logout">Logout</Link>
-          </li>
-        </ul>
-      </div>
-      {/* render the page here */}
-      <div className="content">
-        <Outlet />
-      </div>
-    </div>
+    </>
   );
 }
 
