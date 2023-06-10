@@ -1,10 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
-import CardLayout from "../Layouts/CardLayout";
-import Modal from "../Modals";
 import axios from "axios";
+import CloseIcon from '@mui/icons-material/Close';
+
+import CardLayout from "../Layouts/CardLayout";
 import { UserContext } from "../../App";
+import Modal from "../Modals";
 import "./createNewPostStyle.css";
 import MultiPhotoUpload from "./MultiPhotoUpload";
+import defaultProfilePicture from '../../defaultProfilePicture.svg';
 
 function CreateNewPost(props) {
   const [displayModal, setDisplayModal] = useState(false);
@@ -12,6 +15,10 @@ function CreateNewPost(props) {
   const [createPostImage, setCreatePostImage] = useState([]);
 
   const { user } = useContext(UserContext);
+
+  const displayPicture = user.profilePicture
+    ? `${process.env.REACT_APP_SERVER_URL}/${user.profilePicture}`
+    : defaultProfilePicture;
 
   useEffect(() => {
     setCreatePostImage("");
@@ -24,15 +31,13 @@ function CreateNewPost(props) {
 
   const displayModalButton = () => {
     return (
-      <div>
-        <button className="closeModal" onClick={() => setDisplayModal(false)}>
-          &times;
-        </button>
-      </div>
+      <button className="bg-neutral-600 hover:bg-neutral-500 rounded-full h-7 w-7 flex justify-center items-center" onClick={() => setDisplayModal(false)}>
+        <CloseIcon fontSize="small" />
+      </button>
     );
   };
   const displayModalHeader = () => {
-    return <div>Create Post</div>;
+    return "Create Post";
   };
 
   const uploadPhoto = (pictureArray) => {
@@ -42,33 +47,42 @@ function CreateNewPost(props) {
 
   const modalContents = () => {
     return (
-      <div className="createPostBody">
-        <div className="createPostTextInput">
-          <textarea
-            id="newPostText"
-            className="newPostTextArea"
-            name="newPostText"
-            rows="4"
-            cols="50"
-            value={createPostText}
-            onChange={(event) => {
-              setCreatePostText(event.target.value);
-            }}
+      <>
+        <div className="flex items-center">
+          <img
+            crossOrigin="anonymous"
+            src={displayPicture}
+            className="h-10 w-10 mr-2 rounded-full"
+            alt=""
           />
+          <div className="text-white text-sm">
+            {user.username}
+          </div>
         </div>
-        <div
-          className={`createPostImageInput ${
-            createPostImage.length !== 0 ? "createPostImageInputUploaded" : ""
-          }`}
+        <textarea
+          id="newPostText"
+          className="overflow-y-auto w-full h-24 bg-transparent text-small text-gray-400 focus:outline-none mt-4"
+          name="newPostText"
+          placeholder={`What's on your mind, ${user.username.split(' ')[0]}?`}
+          value={createPostText}
+          onChange={(event) => {
+            setCreatePostText(event.target.value);
+          }}
+        />
+        <div className="relative mt-6"
         >
           {/* <label className='innerImageInput'> */}
           <MultiPhotoUpload picture={""} uploadPhoto={uploadPhoto} />
           {/* </label> */}
         </div>
-        <div className="submitPost">
-          <button onClick={sendPost}>Post</button>
-        </div>
-      </div>
+        <button
+          className="w-full h-10 bg-blue-500 disabled:bg-neutral-600 rounded-lg text-md text-white mt-4 disabled:cursor-not-allowed"
+          disabled={createPostText.length === 0}
+          onClick={sendPost}
+        >
+          Post
+        </button>
+      </>
     );
   };
 
@@ -118,18 +132,15 @@ function CreateNewPost(props) {
   return (
     <>
       <CardLayout>
-        <div>
-          <div className="createPostUpperHeader">
-            <div className="createPostprofilePicture">
-              <img
-                crossOrigin="anonymous"
-                src={`http://localhost:3000/${user.profilePicture}`}
-                alt=""
-              />
-            </div>
-            <div className="inputPost" onClick={createPostModalFunc}>
-              <div>whats on your mind?</div>
-            </div>
+        <div className="flex items-center">
+          <img
+            crossOrigin="anonymous"
+            src={displayPicture}
+            className="h-14 w-14 rounded-full"
+            alt=""
+          />
+          <div className="bg-gray-200 rounded-[20px] w-full h-12 max-w-[450px] p-4 m-2 ml-4 flex items-center" onClick={createPostModalFunc}>
+            What's on your mind?
           </div>
         </div>
       </CardLayout>

@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import CloseIcon from '@mui/icons-material/Close';
 
 function MultiPhotoUpload(props) {
   const [pictureArray, setPictureArray] = useState([]);
@@ -65,8 +67,9 @@ function MultiPhotoUpload(props) {
   };
 
   return (
-    <>
+    <div className="relative h-40 w-full overflow-y-auto">
       <input
+        className="hidden"
         id="pictureInput"
         type="file"
         accept="image/*"
@@ -75,32 +78,33 @@ function MultiPhotoUpload(props) {
         multiple
       />
       <div
-        className={`imageInputBox ${
-          pictureArray.length !== 0 ? "imageUploadedInputBox" : ""
-        }`}
+        className={"cursor-pointer flex justify-center items-center overflow-y-auto ".concat(pictureArray.length !== 0 ? "bg-neutral-300/90 hover:bg-neutral-300 absolute h-9 w-36 flex-row text-sm z-50 top-5 left-3 rounded-lg text-gray-700" : "bg-neutral-500/50 hover:bg-neutral-400/60 h-full w-full rounded-md text-gray-100 flex-col")}
         onClick={handleImageInputClick}
       >
-        {" "}
-        Upload images
+        <AddAPhotoIcon
+          fontSize={pictureArray.length !== 0 ? "small" : "large"}
+          className={pictureArray.length !== 0 ? "mr-1" : "mb-1"}
+        />
+        <p>Upload images</p>
       </div>
 
       {previewArray.length > 0 &&
         previewArray.map((preview, index) => {
           return (
-            <div className="createPostImagePreview" key={index}>
-              <img src={preview} />
+            <div className="w-full relative rounded-md overflow-hidden" key={index}>
+              <img className="w-full" src={preview} alt="" />
               <button
-                className="removePictureButton"
+                className="bg-neutral-300/90 hover:bg-neutral-300 absolute h-7 w-7 rounded-full top-5 right-3 text-gray-700 flex justify-center items-center"
                 onClick={() => {
                   removePicture(index);
                 }}
               >
-                &times;
+                <CloseIcon fontSize="small" />
               </button>
             </div>
           );
         })}
-    </>
+    </div>
   );
 }
 

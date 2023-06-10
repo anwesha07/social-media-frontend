@@ -2,7 +2,7 @@ import React from "react";
 
 function CardLayout(props) {
   return (
-    <div className="bg-[#ffff] w-[500px] rounded-[8px] shadow-md mb-[30px]">
+    <div className="bg-black w-full max-w-[540px] rounded-[8px] shadow-lg p-4 h-[fit-content]">
       {props.children}
     </div>
   );
