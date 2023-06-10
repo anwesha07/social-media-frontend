@@ -66,7 +66,7 @@ function DisplayPosts(props) {
   };
 
   return (
-    <>
+    <div className="w-full flex flex-col items-center gap-4">
       {posts.map((post, index) => (
         <Post
           key={index}
@@ -78,7 +78,7 @@ function DisplayPosts(props) {
           user={user}
         />
       ))}
-    </>
+    </div>
   );
 }
 

@@ -1,41 +1,3 @@
-.postHeader {
-    /* padding: 5px; */
-    display: flex;
-    flex-direction: row;
-}
-.postProfilePicture{
-    padding-bottom: 5px;
-    padding-left: 10px;
-    padding-right: 3px;
-    padding-top: 5px;
-}
-.postProfilePicture img {
-    height: 60px;
-    width: 60px;
-    border-radius: 50%;
-}
-.postUserName {
-    padding-bottom: 5px;
-    padding-left: 3px;
-    padding-right: 5px;
-    padding-top: 5px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    font-size: large;
-}
-
-
-
-.postContent {
-    padding: 10px;
-}
-.lowerFooter {
-    display: flex;
-    flex-direction: row;
-}
 .like, .comment {
     padding: 10px;
     width: 50%;
@@ -46,19 +8,6 @@
 }
 .like:hover {
     background-color: rgba(168, 168, 168, 0.3);
-}
-.upperFooter {
-    padding: 10px;
-    font-size: small;
-}
-
-.deletePost {
-    margin-left: auto;
-    font-size: 1.5rem;
-    padding: 10px;
-    padding-top: 1px;
-    height: 50%;
-    cursor: pointer;
 }
 
 .postImages {
@@ -73,8 +22,4 @@
     border-radius: 5px;
     margin: 2px;
 }
-.postDescription {
-    font-size: 1rem;
-    padding: 5px;
-    margin-bottom: 2px;
-}
+

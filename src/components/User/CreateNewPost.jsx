@@ -5,7 +5,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import CardLayout from "../Layouts/CardLayout";
 import { UserContext } from "../../App";
 import Modal from "../Modals";
-import "./createNewPostStyle.css";
 import MultiPhotoUpload from "./MultiPhotoUpload";
 import defaultProfilePicture from '../../defaultProfilePicture.svg';
 
@@ -76,7 +75,7 @@ function CreateNewPost(props) {
           {/* </label> */}
         </div>
         <button
-          className="w-full h-10 bg-blue-500 disabled:bg-neutral-600 rounded-lg text-md text-white mt-4 disabled:cursor-not-allowed"
+          className="w-full h-10 bg-blue-600/90 disabled:bg-neutral-600 rounded-lg text-md text-white mt-4 disabled:cursor-not-allowed"
           disabled={createPostText.length === 0}
           onClick={sendPost}
         >

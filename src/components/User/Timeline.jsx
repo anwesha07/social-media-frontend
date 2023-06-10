@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
 
 import CreateNewPost from "./CreateNewPost";
-import "./timelineStyles.css";
 import DisplayPosts from "../Posts/DisplayPosts";
 import { UserContext } from "../../App";
 
@@ -47,9 +46,6 @@ function Timeline() {
   }, [pageNumber, TOKEN]);
 
   const handleScroll = (e) => {
-    console.log({ scrollHeight: e.target.scrollHeight });
-    console.log({ scrollTop: e.target.scrollTop });
-    console.log({ clientHeight: e.target.clientHeight });
     const bottom =
       e.target.scrollHeight - e.target.scrollTop - e.target.clientHeight;
     if (bottom < 1 && hasNextPage) {
@@ -58,17 +54,22 @@ function Timeline() {
   };
 
   return (
-    <div className="timeline" onScroll={handleScroll}>
+    <div
+      className="h-full w-full overflow-y-auto py-4 flex flex-col items-center"
+      onScroll={handleScroll}
+    >
       <CreateNewPost
         addNewPost={(post) => {
           setPosts([post, ...posts]);
         }}
       />
-      <DisplayPosts
-        posts={posts}
-        setModifiedPosts={(modifiedPosts) => setPosts(modifiedPosts)}
-        user={user}
-      />
+      <div className="w-full mt-4 pb-10">
+        <DisplayPosts
+          posts={posts}
+          setModifiedPosts={(modifiedPosts) => setPosts(modifiedPosts)}
+          user={user}
+        />
+      </div>
     </div>
   );
 }

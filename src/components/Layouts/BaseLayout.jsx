@@ -12,7 +12,7 @@ function BaseLayout() {
       <div className="flex w-full h-full mt-[72px]">
         <Sidebar />
         {/* render the page here */}
-        <div className="grow bg-slate-700 px-1">
+        <div className="grow bg-slate-700 px-1 pb-10">
           <Outlet />
         </div>
       </div>
