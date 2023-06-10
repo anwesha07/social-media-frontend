@@ -27,59 +27,76 @@ function Page4(props) {
 
   const { username, dateInput, monthInput, yearInput, email } = props.inputs;
   return (
-    <div class="h-[100%] w-[100%] px-2 pt-3">
-      <h1 class=" text-2xl font-normal mb-4">Your Details:</h1>
-      <form
-        onSubmit={submitPage}
-        class=" h-[95%] flex flex-col items-start pt-1"
-      >
-        <label>Name:</label>
+    <>
+      <h1 className="text-2xl font-normal mb-4">Your Details:</h1>
+      <form className="h-full overflow-y-auto mb-5">
+        <label htmlFor="username" className="block my-2 font-medium text-sm">
+          Name:
+        </label>
         <input
+          id="username"
           type="text"
           value={username}
           readOnly
-          class="w-[90%] h-[40px] rounded-2xl px-4 mb-4 text-slate-600"
+          className="w-full h-10 rounded-2xl px-4 mb-2 text-slate-600 focus:outline-none"
         />
-        <label>Date of Birth:</label>
+        <label htmlFor="dob" className="block my-2 font-medium text-sm">
+          Date of Birth:
+        </label>
         <input
+          id="dob"
           type="text"
           value={`${dateInput}/${monthInput}/ ${yearInput}`}
           readOnly
-          class="w-[90%] h-[40px] rounded-2xl px-4 mb-4 text-slate-600"
+          className="w-full h-10 rounded-2xl px-4 mb-2 text-slate-600 focus:outline-none"
         />
-        <label>Email:</label>
+        <label htmlFor="email" className="block my-2 font-medium text-sm">
+          Email:
+        </label>
         <input
+          id="email"
           type="email"
           value={email}
           readOnly
-          class="w-[90%] h-[40px] rounded-2xl px-4 mb-2 text-slate-600"
+          className="w-full h-10 rounded-2xl px-4 mb-2 text-slate-600 focus:outline-none"
         />
 
-        <h2 class="py-2 mt-2 font-bold text-xl">Set your password :</h2>
-        <label>Password:</label>
+        <h2 className="py-2 font-medium text-lg">Set your password:</h2>
+        <label htmlFor="password" className="block my-2 font-medium text-sm">
+          Password:
+        </label>
         <input
           type="password"
+          id="password"
           value={password}
           onChange={setPasswordInput}
-          class="w-[90%] h-[40px] rounded-2xl px-4 mb-4 text-black"
+          className="w-full h-10 rounded-2xl px-4 mb-2 text-slate-600 focus:outline-none"
         />
-        <label>Confirm Password</label>
+        <label
+          htmlFor="confirmPassword"
+          className="block my-2 font-medium text-sm"
+        >
+          Confirm Password
+        </label>
         <input
           type="password"
+          id="confirmPassword"
           value={confirmPassword}
           onChange={setConfirmPasswordInput}
-          class="w-[90%] h-[40px] rounded-2xl px-4 mb-4 text-black"
+          className="w-full h-10 rounded-2xl px-4 mb-2 text-slate-600 focus:outline-none"
         />
 
         {error ? <div>Password doesnot match with confirm password</div> : null}
-
-        <input
-          type="submit"
-          disabled={!password || !confirmPassword}
-          class="border-solid border-2 border-white px-2 py-1 w-20 flex justify-center items-center disabled:border-slate-400 disabled:opacity-75  rounded-3xl cursor-pointer ml-auto "
-        />
       </form>
-    </div>
+
+      <button
+        className="border-solid border-2 border-white px-2 py-1 w-20 flex justify-center items-center disabled:text-slate-400  rounded-3xl cursor-pointer disabled:border-slate-400 disabled:opacity-75 disabled:cursor-not-allowed ml-auto"
+        disabled={!password || !confirmPassword}
+        onClick={submitPage}
+      >
+        Submit
+      </button>
+    </>
   );
 }
 

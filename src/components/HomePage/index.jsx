@@ -33,14 +33,14 @@ function HomePage(props) {
           </div>
           <button
             onClick={handleSignUpModalChange}
-            className="border-solid border-2 border-white px-6 py-2 w-[300px]  mx-2 my-5 rounded-3xl cursor-pointer bg-white text-black font-bold"
+            className="border-solid border-2 border-white px-6 py-2 w-full mx-2 my-5 rounded-3xl cursor-pointer bg-white text-black font-bold"
           >
             Create account
           </button>
           <div className="text-xs">Already have an account?</div>
           <button
             onClick={handleLoginModalChange}
-            className="border-solid border-2 border-white px-6 py-2 w-[300px]  mx-2 my-2 rounded-3xl cursor-pointer bg-white text-black font-bold"
+            className="border-solid border-2 border-white px-6 py-2 w-full  mx-2 my-2 rounded-3xl cursor-pointer bg-white text-black font-bold"
           >
             Sign in
           </button>
@@ -49,8 +49,8 @@ function HomePage(props) {
   };
 
   return (
-    <div className="bg-slate-700 h-screen flex justify-center items-center min-w-[100vw]">
-      <div className="bg-black h-[680px] w-[480px] min-w-[480px] rounded-2xl text-white px-8 py-8 flex flex-col items-center ">
+    <div className="bg-slate-700 h-screen flex justify-center items-center w-[100vw] md:py-8">
+      <div className="bg-black h-full w-full max-w-[480px] md:rounded-2xl text-white px-8 py-8 flex flex-col items-center ">
         {showContent()}
       </div>
     </div>

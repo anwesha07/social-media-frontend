@@ -1,8 +1,10 @@
 import React, { useState, useRef, useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { UserContext } from "../../App";
-
 import axios from "axios";
+import CloseIcon from "@mui/icons-material/Close";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
+import { UserContext } from "../../App";
 
 // import Modal from "../Modals";
 import Page1 from "./Page1";
@@ -103,33 +105,32 @@ function SignUp(props) {
   };
 
   return (
-    <div class=" h-[100%] w-[100%] px-2 py-0">
-      <div class="flex justify-between items-center h-[50px]">
-        <div class="ml-2 text-s font-bold">
+    <div className="h-full w-full px-2 flex flex-col">
+      <div className="flex justify-between items-center h-[50px] shrink-0">
+        <div className="ml-2 text-s font-bold">
           Page {pageNumber} of {totalPages}
         </div>
         <div>
           {pageNumber === 1 ? (
             <button
-              className="closeModal"
+              className="h-6 w-6 rounded-[50%] flex justify-center items-center bg-white text-black font-bold cursor-pointer hover:opacity-75 text-xl"
               onClick={props.closeModal}
-              class="px-1 py-1 border-solid border-2 border-white h-[20px] w-[20px] flex items-center justify-center mr-2 rounded-[50%] bg-white text-black font-bold cursor-pointer hover:opacity-75 "
             >
-              &times;
+              <CloseIcon fontSize="small" />
             </button>
           ) : (
-            <button className="backModal" onClick={goToPreviousPage}>
-              {/* <img
-                  src={arrowBackIcon}
-                  className="arrowBackIcon"
-                  alt="go back"
-                /> */}
-              back
+            <button
+              className="h-[24px] w-[24px] rounded-[50%] flex justify-center items-center bg-white text-black font-bold cursor-pointer hover:opacity-75 text-xl"
+              onClick={goToPreviousPage}
+            >
+              <ArrowBackIcon fontSize="small" />
             </button>
           )}
         </div>
       </div>
-      <div class="h-[92%] w-[100%]">{displayPage()}</div>
+      <div className="w-full h-full px-2 py-3 flex flex-col flex-1 overflow-y-auto">
+        {displayPage()}
+      </div>
     </div>
   );
 }

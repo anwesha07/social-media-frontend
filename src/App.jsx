@@ -40,23 +40,21 @@ function App() {
   if (isLoggedIn === null) return <h1> Loading ...</h1>;
 
   return (
-    <div className="App">
-      <UserContext.Provider value={{ setIsLoggedIn, setUser, user }}>
-        <Routes>
-          <Route path="/" element={<HomePage isLoggedIn={isLoggedIn} />} />
+    <UserContext.Provider value={{ setIsLoggedIn, setUser, user }}>
+      <Routes>
+        <Route path="/" element={<HomePage isLoggedIn={isLoggedIn} />} />
 
-          <Route
-            element={<PrivateRouteLayout isLoggedIn={isLoggedIn} user={user} />}
-          >
-            <Route path="/timeline" element={<Timeline />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/logout" element={<Logout />} />
-          </Route>
+        <Route
+          element={<PrivateRouteLayout isLoggedIn={isLoggedIn} user={user} />}
+        >
+          <Route path="/timeline" element={<Timeline />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/logout" element={<Logout />} />
+        </Route>
 
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </UserContext.Provider>
-    </div>
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </UserContext.Provider>
   );
 }
 

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
 
 import axios from "axios";
 
@@ -24,7 +25,6 @@ function Login(props) {
   const submitPage = (event) => {
     event.preventDefault();
     const data = { email, password };
-    console.log(data);
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/api/auth/login`, data)
       .then((response) => {
@@ -41,46 +41,49 @@ function Login(props) {
   };
 
   return (
-    <div className=" h-[100%] w-[100%] px-2 py-0">
-      {/* <Modal displayButton={displayModalButton()}> */}
-      <div className="flex justify-between items-center h-[50px]">
-        <div className="text-3xl font-normal">Sign In:</div>
-        <div>
-          <button
-            onClick={props.closeModal}
-            className="px-1 py-1 border-solid border-2 border-white h-[20px] w-[20px] flex items-center justify-center mr-2 rounded-[50%] bg-white text-black font-bold cursor-pointer hover:opacity-75 "
-          >
-            &times;
-          </button>
-        </div>
+    <div className="h-full w-full px-2 flex flex-col">
+      <div className="flex justify-between items-center h-12 mb-8">
+        <h1 className="text-3xl font-normal">Sign In</h1>
+        <button
+          className="h-6 w-6 rounded-[50%] flex justify-center items-center bg-white text-black font-bold cursor-pointer hover:opacity-75 text-xl"
+          onClick={props.closeModal}
+        >
+          <CloseIcon fontSize="small" />
+        </button>
       </div>
       <form
+        className="h-full overflow-y-auto flex flex-col"
         onSubmit={submitPage}
-        className="h-[95%] flex flex-col items-center pt-8"
       >
-        <div className="h-[32%]">
-          <label>Email:</label>
+        <div className="grow">
+          <label htmlFor="email" className="block my-2 font-medium text-sm">
+            Email:
+          </label>
           <input
             type="email"
+            id="email"
             value={email}
             onChange={handleEmailValue}
-            className="w-[90%] h-[40px] rounded-2xl px-4 mb-4 text-slate-700 focus:outline-none"
+            className="w-full h-10 rounded-2xl px-4 mb-2 text-slate-600 focus:outline-none"
           />
-          <label>Password:</label>
+          <label htmlFor="password" className="block my-2 font-medium text-sm">
+            Password:
+          </label>
           <input
             type="password"
+            id="password"
             value={password}
             onChange={handlePasswordValue}
-            className="w-[90%] h-[40px] rounded-2xl px-4 mb-4 text-slate-700 focus:outline-none"
+            className="w-full h-10 rounded-2xl px-4 mb-2 text-slate-600 focus:outline-none"
           />
         </div>
 
-        <div className="w-[100%] flex justify-start items-start">
+        <div className="w-full flex justify-start items-start">
           <input
             type="submit"
             value="Login"
             disabled={!email || !password}
-            className="border-solid border-2 border-white px-6 py-2 w-[90%] h-[40px] my-2 rounded-3xl cursor-pointer font-bold hover:opacity-75"
+            className="border-solid border-2 border-white w-full h-10 my-2 rounded-3xl cursor-pointer font-bold hover:opacity-75"
           />
         </div>
       </form>

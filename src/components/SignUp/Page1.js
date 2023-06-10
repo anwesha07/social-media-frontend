@@ -52,36 +52,33 @@ function Page1(props) {
   };
 
   return (
-    <div class="px-2 pt-3 h-[500px]">
-      <div class="text-3xl font-normal mb-5">Create your account</div>
-      <form
-        onSubmit={submitPage}
-        class="h-[95%] flex flex-col items-start pt-2"
-      >
+    <div className="h-full flex flex-col">
+      <h1 className="text-3xl font-normal mb-8">Create your account</h1>
+      <form className="flex flex-col items-start grow">
         <input
           placeholder="Name"
           type="text"
           value={username}
           onChange={setName}
-          class="w-[90%] h-[40px] rounded-2xl px-4 mb-4 text-black"
+          className="w-[100%] h-[40px] rounded-2xl px-4 mb-4 text-black focus:outline-none"
         />
         <input
           placeholder="Email"
           type="email"
           value={email}
           onChange={setEmail}
-          class="w-[90%] h-[40px] rounded-2xl px-4 mb-4 text-black"
+          className="w-[100%] h-[40px] rounded-2xl px-4 mb-4 text-black focus:outline-none"
         />
-        <div class="py-2 mt-4 font-medium">Date of Birth:</div>
-        <div class=" w-[100%] h-[250px] px-2 py-2 flex">
-          <div>
-            <div class="text-xs pb-1">Month</div>
+        <p className="py-2 font-medium">Date of Birth:</p>
+        <div className="w-[100%] py-2 flex">
+          <div className="grow mr-4">
+            <div className="text-xs pb-2 pl-1">Month</div>
             <select
               name="month"
               id="month"
               onChange={setMonth}
               value={monthInput}
-              class="border-solid border-2 border-white rounded-2xl  bg-black mr-4 h-10 px-4"
+              className="w-[100%] border-solid border-2 border-white rounded-2xl bg-black h-10 focus:outline-none"
             >
               <option></option>
               {Object.keys(months.current).map((element, index) => (
@@ -91,14 +88,14 @@ function Page1(props) {
               ))}
             </select>
           </div>
-          <div>
-            <div class="text-xs pb-1 pl-1">Day</div>
+          <div className="grow mr-4">
+            <div className="text-xs pb-2 pl-1">Day</div>
             <select
               name="day"
               id="day"
               onChange={setDate}
               value={dateInput}
-              class="border-solid border-2 border-white rounded-2xl bg-black mr-4 h-10 px-4"
+              className="w-[100%] border-solid border-2 border-white rounded-2xl bg-black h-10 focus:outline-none"
             >
               <option></option>
               {[...Array(months.current[monthName] || 31).keys()].map((i) => (
@@ -108,14 +105,14 @@ function Page1(props) {
               ))}
             </select>
           </div>
-          <div>
-            <div class="text-xs pb-1 pl-1">Year</div>
+          <div className="grow">
+            <div className="text-xs pb-2 pl-1">Year</div>
             <select
               name="year"
               id="year"
               onChange={setYear}
               value={yearInput}
-              class="border-solid border-2 border-white rounded-2xl bg-black h-10 px-4"
+              className="w-[100%] border-solid border-2 border-white rounded-2xl bg-black h-10 px-4 focus:outline-none"
             >
               <option></option>
               {[...Array(121).keys()].map((i) => {
@@ -129,15 +126,14 @@ function Page1(props) {
             </select>
           </div>
         </div>
-        <input
-          type="submit"
-          //   disabled={
-          //     !(monthInput && dateInput && yearInput && username && email)
-          //   }
-          value="Next"
-          class="border-solid border-2 border-white px-2 py-1 w-20 flex justify-center items-center disabled:text-slate-400  rounded-3xl cursor-pointer ml-auto disabled:border-slate-400 disabled:opacity-75"
-        />
       </form>
+      <button
+        disabled={!(monthInput && dateInput && yearInput && username && email)}
+        className="border-solid border-2 border-white px-2 py-1 w-20 flex justify-center items-center disabled:text-slate-400  rounded-3xl cursor-pointer disabled:border-slate-400 disabled:opacity-75 disabled:cursor-not-allowed ml-auto"
+        onClick={submitPage}
+      >
+        Next
+      </button>
     </div>
   );
 }
