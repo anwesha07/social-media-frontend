@@ -1,8 +1,14 @@
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import SendIcon from '@mui/icons-material/Send';
+import { UserContext } from '../../App';
+import defaultProfilePicture from '../../defaultProfilePicture.svg';
 
 function Comments(props) {
   const { post } = props;
+
+  const { user } = useContext(UserContext);
+
   const [comments, setComments] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [hasNextPage, setHasNextPage] = useState("false");
@@ -10,12 +16,19 @@ function Comments(props) {
 
   const TOKEN = localStorage.getItem("TOKEN");
 
+  const userDisplayPicture = user.profilePicture
+    ? `${process.env.REACT_APP_SERVER_URL}/${user.profilePicture}`
+    : defaultProfilePicture;
+
   useEffect(() => {
     const postId = post._id;
     const config = {
       params: {
         page: pageNumber,
       },
+      headers: {
+        "ngrok-skip-browser-warning": true,
+      }
     };
     axios
       .get(
@@ -62,7 +75,6 @@ function Comments(props) {
   };
 
   const displayComments = () => {
-    console.log(comments);
     return comments.map((comment, index) => {
       const timestamp = new Date(comment.createdAt);
       const options = {
@@ -72,57 +84,72 @@ function Comments(props) {
         minute: "numeric",
         hour12: true,
       };
-      console.log(timestamp.getFullYear());
       if (timestamp.getFullYear() !== new Date().getFullYear()) {
         options.year = "numeric";
       }
       const formatter = new Intl.DateTimeFormat("en-US", options);
       const time = formatter.format(timestamp);
 
-      console.log(time);
+      const commentAuthorDisplayPicture = comment.author.profilePicture
+        ? `${process.env.REACT_APP_SERVER_URL}/${comment.author.profilePicture}`
+        : defaultProfilePicture
+
       return (
-        <div
-          key={index}
-          className="flex flex-col border border-slate-700 mx-2 mb-2"
-        >
-          <div className="flex">
-            <div className="mx-2">{comment.author.username}</div>
-            <div>{time}</div>
+        <div className="ml-1 flex">
+          <img
+            src={commentAuthorDisplayPicture}
+            className="h-10 w-10 rounded-full mr-1"
+            alt={comment.author.username}
+          />
+          <div
+            key={index}
+            className="flex flex-col bg-gray-600/80 mx-2 mb-2 text-white rounded-2xl px-4 py-2 w-[fit-content]"
+          >
+
+            <div className="flex items-center">
+              <p className="mr-2 text-xs">{comment.author.username}</p>
+              <p className="text-[0.6rem] text-gray-300">{time}</p>
+            </div>
+            <div className="mt-1.5 text-sm font-thin">{comment.content}</div>
           </div>
-          <div className="mx-2">{comment.content}</div>
         </div>
       );
     });
   };
 
   return (
-    <div className="flex flex-col justify-start">
-      <form
-        className="flex justify-start items-center"
-        onSubmit={submitComment}
-      >
-        <div className="p-[5px] w-[80%]">
+    <>
+      <div className="flex flex-col justify-start mt-6">
+        <form
+          className="flex justify-start items-center relative w-full"
+          onSubmit={submitComment}
+        >
+          <img src={userDisplayPicture} className="h-12 w-12 mr-2 rounded-full" alt={user.username} />
           <input
             type="text"
-            className="border-[2px] border-black rounded-[5px] w-[100%] h-[30px] p-[5px]"
-            placeholder="Enter your comment here.."
+            className="bg-gray-200 rounded-2xl w-full h-9 p-3 focus:outline-none"
+            placeholder="Enter your comment here"
             value={commentContent}
             onChange={(event) => setCommentContent(event.target.value)}
           />
+          <button
+            type="submit"
+            disabled={commentContent.length === 0}
+            className="text-blue-600/90 disabled:text-neutral-500 absolute right-3"
+          >
+            <SendIcon />
+          </button>
+        </form>
+        <div className="mt-4">
+          {displayComments()}
+          {hasNextPage ? (
+            <button onClick={loadMoreComments} className="text-gray-400/80 mt-4 text-sm">
+              Load more comments
+            </button>
+          ) : null}
         </div>
-        <input
-          type="submit"
-          value="save"
-          className="bg-slate-700 text-white p-[5px] rounded-[5px] ml-[5px] w-[15%]"
-        />
-      </form>
-      <div>
-        {displayComments()}
-        {hasNextPage ? (
-          <button onClick={loadMoreComments}>View more</button>
-        ) : null}
       </div>
-    </div>
+    </>
   );
 }
 
