@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import defaultCoverImage from "../../defaultCoverImage.jpg";
+import defaultCoverImage from "../../defaultCoverImage.jpeg";
 import axios from "axios";
 
 function EditCoverPicture(props) {

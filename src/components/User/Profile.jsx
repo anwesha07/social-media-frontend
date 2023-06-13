@@ -1,12 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import RssFeedIcon from '@mui/icons-material/RssFeed';
+import EditIcon from '@mui/icons-material/Edit';
+import CheckIcon from '@mui/icons-material/Check';
 
 import DisplayPosts from "../Posts/DisplayPosts";
-import "./profileStyles.css";
 
-import defaultCoverImage from "../../defaultCoverImage.jpg";
+import defaultCoverImage from "../../defaultCoverImage.jpeg";
 import defaultProfilePicture from "../../defaultProfilePicture.svg";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import EditProfilePicture from "./EditProfilePicture";
 import EditCoverPicture from "./EditCoverPicture";
 import { UserContext } from "../../App";
@@ -26,13 +28,14 @@ function Profile() {
   const [username, setUsername] = useState(userContext.username);
   const [description, setDescription] = useState("");
 
-  console.log(userContext);
+  const usernameRef = useRef(null);
 
   // fetching profile details
   useEffect(() => {
     const userConfig = {
       headers: {
         "x-token": TOKEN,
+        "ngrok-skip-browser-warning": true,
       },
     };
     axios
@@ -53,6 +56,7 @@ function Profile() {
     const postConfig = {
       headers: {
         "x-token": TOKEN,
+        "ngrok-skip-browser-warning": true,
       },
       params: {
         page: pageNumber,
@@ -124,95 +128,108 @@ function Profile() {
           console.log(error);
           setUser(user);
         });
+    } else {
+      usernameRef.current.focus();
     }
     setEditProfile((currentState) => !currentState);
   };
 
   if (user === null) return <h1> Loading ...</h1>;
+
   return (
     <>
-      <div className="profile" onScroll={handleScroll}>
-        <div className="profileHeader">
-          {user.coverPicture === "" ? (
-            <div className="defaultCoverPicture">
-              <img crossOrigin="anonymous" src={defaultCoverImage} alt="" />
-              <button onClick={() => setEditCoverPicture(true)}>
-                Add cover picture
-              </button>
-            </div>
-          ) : (
-            <div className="coverPicture">
+      <div className="relative overflow-y-auto h-screen" onScroll={handleScroll}>
+        <div className="h-full w-full px-4 sm:px-8 lg:px-20">
+          <div className="h-96 relative">
+            <div
+              crossOrigin="anonymous"
+              style={{
+                backgroundImage: user.coverPicture === ""
+                  ? `url(${defaultCoverImage})`
+                  : `url(${process.env.REACT_APP_SERVER_URL}/${user.coverPicture})`
+              }}
+              className="h-full w-full bg-center bg-cover rounded-lg"
+              alt=""
+            />
+            <button
+              className="absolute right-3 bottom-3 px-3 py-2 bg-gray-600/80 rounded-md text-gray-200 text-sm font-extralight"
+              onClick={() => setEditCoverPicture(true)}
+            >
+              {user.coverPicture === "" ? "Add cover picture" : "Remove cover picture"}
+            </button>
+          </div>
+
+          <div className="px-2 flex">
+            <div className="h-52 w-52 relative">
               <img
                 crossOrigin="anonymous"
-                src={`${process.env.REACT_APP_SERVER_URL}/${user.coverPicture}`}
+                src={user.profilePicture ? `${process.env.REACT_APP_SERVER_URL}/${user.profilePicture}` : defaultProfilePicture}
+                className="h-48 w-48 rounded-full absolute left-2 -top-16 border-4 border-white"
                 alt=""
               />
-              <button onClick={() => setEditCoverPicture(true)}>
-                Remove cover picture
-              </button>
-            </div>
-          )}
-
-          <div className="profileDetails">
-            <div className="profileDetailsLeftContent">
-              {user.profilePicture ? (
-                <img
-                  crossOrigin="anonymous"
-                  src={`${process.env.REACT_APP_SERVER_URL}/${user.profilePicture}`}
-                  alt=""
-                />
-              ) : (
-                <img
-                  crossOrigin="anonymous"
-                  src={defaultProfilePicture}
-                  alt=""
-                />
-              )}
-              <div className="description">
-                <input
-                  value={description}
-                  readOnly={!editProfile}
-                  onChange={handleDescriptionChange}
-                />
-              </div>
               <button
-                className="absolute top-[80px] left-[65%] bg-white h-[40px] w-[40px] border-[2px] border-gray-300 flex items-center justify-center rounded-full p-2"
+                className="absolute top-20 left-2/3 bg-white h-[40px] w-[40px] border-[2px] border-gray-300 flex items-center justify-center rounded-full p-2"
                 onClick={handleEditProfilePicture}
               >
                 <EditRoundedIcon />
               </button>
             </div>
 
-            <div className="profileDetailsRightContent">
-              <div className="userDetails">
-                <div className="userName">
+            <div className="relative flex-1">
+              <div className="ml-4 mt-8 w-full">
+                <div className="text-5xl text-gray-100 mb-2 flex items-center max-w-[480px] w-3/4 relative">
                   <input
+                    ref={usernameRef}
                     value={username}
                     readOnly={!editProfile}
                     onChange={handleUserNameChange}
+                    className="bg-transparent w-full focus:outline-none border-b border-b-gray-100 read-only:border-none"
                   />
+                  {editProfile && <EditIcon style={{ fontSize: '2rem' }} className="text-gray-200 mr-2 absolute right-0" />}
                 </div>
-                <button>{`${user.followers.length} followers`}</button>
-                <button>{`${user.following.length} following`}</button>
+                <div>
+                  <RssFeedIcon fontSize="small" className="text-gray-300 mr-2" />
+                  <button className="text-gray-300 mr-3">{`${user.followers.length} followers`}</button>
+                  <button className="text-gray-300">{`${user.following.length} following`}</button>
+                </div>
+                <div className="font-light mt-8 text-gray-300 flex items-center max-w-[480px] w-3/4 relative">
+                  <input
+                    value={description}
+                    readOnly={!editProfile}
+                    onChange={handleDescriptionChange}
+                    className="bg-transparent w-full focus:outline-none border-b border-b-gray-100 read-only:border-none"
+                  />
+                  {editProfile && <EditIcon style={{ fontSize: '0.9rem' }} className="text-gray-200 mr-2 absolute right-2" />}
+                </div>
               </div>
 
-              <div className="editProfile">
-                <button onClick={editProfileDetails}>
-                  {editProfile ? "Save Details" : "Edit profile"}
+              {editProfile ? (
+                <button
+                  onClick={editProfileDetails}
+                  className="absolute right-3 top-6 px-3 py-2 text-gray-300 text-sm bg-blue-600/80 rounded-md flex items-center"
+                >
+                  <CheckIcon fontSize="small" className="mr-1" />
+                  Save Details
                 </button>
-              </div>
+              ) : (
+                  <button
+                    onClick={editProfileDetails}
+                    className="absolute right-3 top-6 px-3 py-2 text-gray-300 text-sm bg-gray-950 rounded-md flex items-center"
+                  >
+                  <EditIcon fontSize="small" className="mr-1" />
+                  Edit profile
+                </button>
+              )}
             </div>
           </div>
         </div>
-        <div className="lowerProfileContent">
-          <div className="posts">
-            <DisplayPosts
-              posts={posts}
-              setModifiedPosts={(modifiedPosts) => setPosts(modifiedPosts)}
-              postPage="profile"
-              user={user}
-            />
-          </div>
+        <div className="pb-20">
+          <DisplayPosts
+            posts={posts}
+            setModifiedPosts={(modifiedPosts) => setPosts(modifiedPosts)}
+            postPage="profile"
+            user={user}
+          />
         </div>
       </div>
 

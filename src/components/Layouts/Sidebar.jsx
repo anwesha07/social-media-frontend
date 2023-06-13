@@ -25,6 +25,7 @@ function Sidebar() {
         />
         <h2 className="text-white text-xl ml-6 hidden md:block">
           <span className="text-sm">Welcome 👋</span>
+          <br />
           {user.username}
         </h2>
       </div>
