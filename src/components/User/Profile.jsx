@@ -1,16 +1,15 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import RssFeedIcon from '@mui/icons-material/RssFeed';
-import EditIcon from '@mui/icons-material/Edit';
-import CheckIcon from '@mui/icons-material/Check';
+import RssFeedIcon from "@mui/icons-material/RssFeed";
+import EditIcon from "@mui/icons-material/Edit";
+import CheckIcon from "@mui/icons-material/Check";
 
 import DisplayPosts from "../Posts/DisplayPosts";
 
-import defaultCoverImage from "../../defaultCoverImage.jpeg";
 import defaultProfilePicture from "../../defaultProfilePicture.svg";
 import EditProfilePicture from "./EditProfilePicture";
-import EditCoverPicture from "./EditCoverPicture";
+import CoverPicture from "./CoverPicture";
 import { UserContext } from "../../App";
 
 function Profile() {
@@ -23,7 +22,6 @@ function Profile() {
   const [hasNextPage, setHasNextPage] = useState(false);
   const [user, setUser] = useState(null);
   const [isEditingProfilePicture, setEditProfilePicture] = useState(false);
-  const [isEditingCoverPicture, setEditCoverPicture] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
   const [username, setUsername] = useState(userContext.username);
   const [description, setDescription] = useState("");
@@ -35,13 +33,11 @@ function Profile() {
     const userConfig = {
       headers: {
         "x-token": TOKEN,
-        "ngrok-skip-browser-warning": true,
       },
     };
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/api/user/me`, userConfig)
       .then((response) => {
-        console.log(response.data);
         setUser(response.data);
         setUsername(response.data.username);
         setDescription(response.data.description);
@@ -56,7 +52,6 @@ function Profile() {
     const postConfig = {
       headers: {
         "x-token": TOKEN,
-        "ngrok-skip-browser-warning": true,
       },
       params: {
         page: pageNumber,
@@ -65,7 +60,6 @@ function Profile() {
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/api/user/me/posts`, postConfig)
       .then((response) => {
-        console.log(response.data);
         setHasNextPage(response.data.hasNextPage);
         setPosts((posts) => [...posts, ...response.data.posts]);
       })
@@ -119,7 +113,6 @@ function Profile() {
           userConfig
         )
         .then((res) => {
-          console.log(res.data);
           setUser(res.data);
           setUserContext({ ...user, username: res.data.username });
           closeEditProfilePicturePage();
@@ -138,32 +131,22 @@ function Profile() {
 
   return (
     <>
-      <div className="relative overflow-y-auto h-screen" onScroll={handleScroll}>
+      <div
+        className="relative overflow-y-auto h-screen"
+        onScroll={handleScroll}
+      >
         <div className="h-full w-full px-4 sm:px-8 lg:px-20">
-          <div className="h-96 relative">
-            <div
-              crossOrigin="anonymous"
-              style={{
-                backgroundImage: user.coverPicture === ""
-                  ? `url(${defaultCoverImage})`
-                  : `url(${process.env.REACT_APP_SERVER_URL}/${user.coverPicture})`
-              }}
-              className="h-full w-full bg-center bg-cover rounded-lg"
-              alt=""
-            />
-            <button
-              className="absolute right-3 bottom-3 px-3 py-2 bg-gray-600/80 rounded-md text-gray-200 text-sm font-extralight"
-              onClick={() => setEditCoverPicture(true)}
-            >
-              {user.coverPicture === "" ? "Add cover picture" : "Remove cover picture"}
-            </button>
-          </div>
+          <CoverPicture src={user.coverPicture} setUser={setUser} />
 
           <div className="px-2 flex">
             <div className="h-52 w-52 relative">
               <img
                 crossOrigin="anonymous"
-                src={user.profilePicture ? `${process.env.REACT_APP_SERVER_URL}/${user.profilePicture}` : defaultProfilePicture}
+                src={
+                  user.profilePicture
+                    ? `${process.env.REACT_APP_SERVER_URL}/${user.profilePicture}`
+                    : defaultProfilePicture
+                }
                 className="h-48 w-48 rounded-full absolute left-2 -top-16 border-4 border-white"
                 alt=""
               />
@@ -185,10 +168,18 @@ function Profile() {
                     onChange={handleUserNameChange}
                     className="bg-transparent w-full focus:outline-none border-b border-b-gray-100 read-only:border-none"
                   />
-                  {editProfile && <EditIcon style={{ fontSize: '2rem' }} className="text-gray-200 mr-2 absolute right-0" />}
+                  {editProfile && (
+                    <EditIcon
+                      style={{ fontSize: "2rem" }}
+                      className="text-gray-200 mr-2 absolute right-0"
+                    />
+                  )}
                 </div>
                 <div>
-                  <RssFeedIcon fontSize="small" className="text-gray-300 mr-2" />
+                  <RssFeedIcon
+                    fontSize="small"
+                    className="text-gray-300 mr-2"
+                  />
                   <button className="text-gray-300 mr-3">{`${user.followers.length} followers`}</button>
                   <button className="text-gray-300">{`${user.following.length} following`}</button>
                 </div>
@@ -199,7 +190,12 @@ function Profile() {
                     onChange={handleDescriptionChange}
                     className="bg-transparent w-full focus:outline-none border-b border-b-gray-100 read-only:border-none"
                   />
-                  {editProfile && <EditIcon style={{ fontSize: '0.9rem' }} className="text-gray-200 mr-2 absolute right-2" />}
+                  {editProfile && (
+                    <EditIcon
+                      style={{ fontSize: "0.9rem" }}
+                      className="text-gray-200 mr-2 absolute right-2"
+                    />
+                  )}
                 </div>
               </div>
 
@@ -212,10 +208,10 @@ function Profile() {
                   Save Details
                 </button>
               ) : (
-                  <button
-                    onClick={editProfileDetails}
-                    className="absolute right-3 top-6 px-3 py-2 text-gray-300 text-sm bg-gray-950 rounded-md flex items-center"
-                  >
+                <button
+                  onClick={editProfileDetails}
+                  className="absolute right-3 top-6 px-3 py-2 text-gray-300 text-sm bg-gray-950 rounded-md flex items-center"
+                >
                   <EditIcon fontSize="small" className="mr-1" />
                   Edit profile
                 </button>
@@ -238,14 +234,6 @@ function Profile() {
           closeEditProfilePicturePage={closeEditProfilePicturePage}
           profilePicture={user.profilePicture}
           user={userContext}
-          setUser={setUser}
-          setUserContext={setUserContext}
-        />
-      ) : null}
-      {isEditingCoverPicture ? (
-        <EditCoverPicture
-          closeEditCoverPicture={() => setEditCoverPicture(false)}
-          coverPicture={user.coverPicture}
           setUser={setUser}
           setUserContext={setUserContext}
         />
