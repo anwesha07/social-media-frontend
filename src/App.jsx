@@ -2,6 +2,7 @@ import HomePage from "./components/HomePage";
 import PageNotFound from "./components/ErrorPage/PageNotFound";
 import Timeline from "./components/User/Timeline";
 import Profile from "./components/User/Profile";
+import ViewProfile from "./components/User/ViewProfile";
 import PrivateRouteLayout from "./components/Layouts";
 import { Routes, Route } from "react-router-dom";
 import axios from "axios";
@@ -49,6 +50,7 @@ function App() {
         >
           <Route path="/timeline" element={<Timeline />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:id" element={<ViewProfile />} />
           <Route path="/logout" element={<Logout />} />
         </Route>
 
